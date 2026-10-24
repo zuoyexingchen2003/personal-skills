@@ -1,0 +1,31 @@
+name: macOS compatibility
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/macos.yml'
+      - 'tests/macos-smoke.sh'
+      - 'scripts/install.sh'
+      - 'skills/change-wallpaper/scripts/*macos*'
+      - 'skills/real-esrgan-skill/scripts/*macos*'
+permissions:
+  contents: read
+jobs:
+  macos:
+    strategy:
+      fail-fast: false
+      matrix:
+        runner: [macos-latest, macos-15-intel]
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compile, install and exercise native macOS paths
+        run: bash tests/macos-smoke.sh
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: macos-tools-${{ matrix.runner }}
+          path: ${{ runner.temp }}/change-wallpaper-macos-test/artifact/
+          if-no-files-found: warn
