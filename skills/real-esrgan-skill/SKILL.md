@@ -5,6 +5,12 @@ description: Upscale images and videos 2x/4x with Real-ESRGAN super resolution. 
 
 # Real-ESRGAN Upscale
 
+## macOS V1.1 entry point
+
+For macOS still images, use `bash "$SKILL_DIR/scripts/upscale-macos.sh" INPUT OUTPUT.png [TILE_SIZE]`. The complete Mac ZIP includes the official Intel/Apple Silicon universal ncnn/Vulkan engine. This path runs `realesrgan-x4plus` at real 4x scale and verifies pixel dimensions with the system `sips` utility. It needs working Metal/MoltenVK GPU support, not Python, ffmpeg, CUDA or a paid API. Default tile size is 128; retry once with 64 only for memory trouble. Preserve the input and use a new output path.
+
+Source-only installations download only the official Mac ZIP and verify SHA-256 `e0ad05580abfeb25f8d8fb55aaf7bedf552c375b5b4d9bd3c8d59764d2cc333a`. Do not disable Gatekeeper or strip quarantine automatically; if macOS blocks an unsigned executable, explain the specific system approval needed. This supersedes the old global-disable suggestion in the upstream runtime README.
+
 ## Windows portable entry point (personal-skills addition)
 
 For Windows still-image upscaling, prefer the bundled PowerShell entry point:

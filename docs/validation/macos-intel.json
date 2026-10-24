@@ -1,0 +1,11 @@
+{
+  "Platform": "macOS-15.7.9-x86_64-i386-64bit-Mach-O",
+  "Architecture": "x86_64",
+  "UniversalCompile": "PASS",
+  "Geometry": "PASS",
+  "Installer": "PASS",
+  "ExistingPreservedAndUpdateBackedUp": "PASS",
+  "NativeDesktop": "APPLY_RESTORE_PASS",
+  "OfficialEngineLoad": "PASS",
+  "GPU": "INFERENCE_4X_PASS"
+}

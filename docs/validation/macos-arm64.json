@@ -1,0 +1,11 @@
+{
+  "Platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+  "Architecture": "arm64",
+  "UniversalCompile": "PASS",
+  "Geometry": "PASS",
+  "Installer": "PASS",
+  "ExistingPreservedAndUpdateBackedUp": "PASS",
+  "NativeDesktop": "APPLY_RESTORE_PASS",
+  "OfficialEngineLoad": "PASS",
+  "GPU": "INFERENCE_4X_PASS"
+}

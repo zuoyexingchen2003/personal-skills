@@ -31,4 +31,22 @@
 
 已实测的是上述双屏、GPU 与两个 PowerShell 版本。其他品牌显卡、8K、超宽屏、实体竖屏、多于两块屏幕和远程桌面没有逐一实测；这些场景须在目标机器上先运行 Inspect 并检查生成结果。Windows 10/11 是目标平台，不能把此记录表述成两个 Windows 版本都已做完整硬件实测。
 
-macOS/Linux 自动壁纸控制不在本包已实现或已验证的范围内。内置 image_gen 工具的权限由实际使用环境提供，不由安装包保证。
+V1.1 的 macOS 验证见下方；Linux 自动壁纸控制不在本包范围内。内置 image_gen 权限仍由实际环境提供。
+
+## V1.1 macOS 实际调用
+
+[成功运行 40083427744](https://github.com/zuoyexingchen2003/personal-skills/actions/runs/40083427744)，源码提交 `18cc8682512e9c6354befd2699eb5799547788b2`。发布 helper 旁的 source.sha256 与当前 Swift 源码 `98496b3373736180ee781a12f0bae8177826241881a050351b2d0e6656e241d4` 相符。
+
+| 项目 | Intel macOS 15.7.9 | arm64 macOS 26.6.2 |
+|---|---|---|
+| Intel + arm64 universal 编译 | 通过 | 通过 |
+| 横竖合成图像、像素不足拒绝 | 通过 | 通过 |
+| 带空格路径安装、保留已有技能、更新备份 | 通过 | 通过 |
+| 原生屏幕探测、实际桌面设置、读回、恢复 | 通过 | 通过 |
+| 篡改文件校验拒绝 | 通过 | 通过 |
+| 官方 universal 引擎加载 | 通过 | 通过 |
+| 真实 GPU 64×64→256×256 推理 | 通过 | 通过 |
+
+机器可读结果：[Intel](validation/macos-intel.json)、[arm64](validation/macos-arm64.json)。GPU 为 Apple Paravirtual device。首次测试发现桌面设置到读回存在刷新时差，已改为最长 5 秒的有限读回等待，并在两架构重测通过。
+
+以上是实际托管 macOS 会话中的 API 调用与小图 GPU 推理，不等同于实体 Retina 多屏、大图 AI 视觉质量或完整自主生成流程。macOS 12 为最低编译目标，未逐一验证每个 OS 版本和实体显卡。

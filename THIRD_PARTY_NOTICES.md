@@ -13,6 +13,10 @@ The complete ZIP redistributes the official Windows portable runtime, including 
 
 Runtime source: `https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.5.0/realesrgan-ncnn-vulkan-20220424-windows.zip`.
 
-Pinned official archive SHA-256: `ABC02804E17982A3BE33675E4D471E91EA374E65B70167ABC09E31ACB412802D`.
+Pinned Windows archive SHA-256: `ABC02804E17982A3BE33675E4D471E91EA374E65B70167ABC09E31ACB412802D`.
+
+V1.1 also distributes the official Intel/Apple Silicon universal Mac runtime from `https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.5.0/realesrgan-ncnn-vulkan-20220424-macos.zip`.
+
+Pinned macOS archive SHA-256: `E0AD05580ABFEB25F8D8FB55AAF7BEDF552C375B5B4D9BD3C8D59764D2CC333A`. The native wallpaper helper is built from this repository's MIT-licensed Swift source; it is not Apple-notarized. The original runtime README's global-disable Gatekeeper suggestion is not part of this repository's workflow. Upstream runtime/model licenses remain applicable.
 
 No API credentials, account access, or rights to a particular user's input images are included in this distribution. Installing the imagegen instructions does not enable an unavailable hosted image generation tool.

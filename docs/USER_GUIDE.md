@@ -1,5 +1,7 @@
 # 完整使用说明
 
+V1.1 支持 Windows 与 macOS。本文手动命令为 Windows；Mac 用户请阅读 [MACOS.md](MACOS.md)。原 Windows 发行版保留并标为 V1.0。
+
 ## 1. 安装包与源代码
 
 给朋友使用时优先下载 Release 完整 ZIP：三个相关技能和本机高清处理程序都在包内。GitHub 的 `Code → Download ZIP` 是源代码包，未带大型运行时，首次使用 Real-ESRGAN 时需要联网下载官方引擎。两种方式都需要 Codex 的内置图片工具来执行 imagegen 补绘。
@@ -111,4 +113,4 @@ AI 会推断原图没有明确记录的细节。较多像素不等于较多真�
 
 ## 9. 适用范围与已验证范围
 
-Windows 壁纸控制脚本面向 Windows 10/11 x64。代码按实际活动屏幕动态工作，但没有在所有品牌显卡、显示器、远程桌面环境或其他朋友的电脑上逐一实测。现有实测范围见 [VALIDATION.md](VALIDATION.md)。macOS/Linux 用户可以参考原 Real-ESRGAN skill 的上游说明，本包没有实现或验证这些系统的自动壁纸控制。
+Windows 路径面向 Windows 10/11 x64，按实际活动屏幕动态工作，尚未逐一测试所有显卡、显示器及远程桌面。V1.1 新增 macOS 原生路径，已在 Intel 与 arm64 托管 macOS 测试机验证桌面 API 和真实 GPU 小图推理；实体 Retina 多屏视觉效果仍须在目标电脑检查。详见 [VALIDATION.md](VALIDATION.md)。Linux 自动壁纸控制不在本包范围内。

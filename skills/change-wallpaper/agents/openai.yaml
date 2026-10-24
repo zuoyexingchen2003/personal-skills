@@ -1,3 +1,3 @@
 interface:
   display_name: "Change Wallpaper"
-  short_description: "自动识别 Windows 各显示器，补绘并用 AI 放大为分别适配的高清桌面壁纸"
+  short_description: "自动识别 Windows 或 Mac 各显示器，补绘并用 AI 放大为分别适配的高清壁纸"

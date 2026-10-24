@@ -1,17 +1,19 @@
 ---
 name: change-wallpaper
-description: 将用户图片补绘并用 Real-ESRGAN 增强为高清 Windows 桌面壁纸，自动识别当前电脑各显示器的真实分辨率、方向与比例，逐屏适配、设置和核验。用于更换壁纸或制作适配显示器的高清背景。
+description: 将用户图片补绘并用 Real-ESRGAN 增强为高清 Windows 或 macOS 桌面壁纸，自动识别当前电脑各显示器的像素尺寸、方向与比例，逐屏适配、设置和核验，支持 Retina。
 ---
 
 # Change Wallpaper
 
-适用于 Windows 10/11 x64。不绑定作者的用户名、硬盘目录、显示器型号、屏幕数量或固定分辨率。只制作图片时不要自动设置桌面；用户已要求更换壁纸时，完成检查后直接设置。
+V1.1 适用于 Windows 10/11 x64，以及 macOS 12+ 的 Intel / Apple Silicon。V1.0 是保留的 Windows 发行版。不绑定作者的用户名、硬盘目录、显示器型号、屏幕数量或固定分辨率。只制作图片时不要自动设置桌面；用户已要求更换壁纸时，完成检查后直接设置。
+
+先判断运行系统：Windows 使用下方 PowerShell 入口；**macOS 先读取 [macOS 入口与 Retina 处理](references/macos.md)**，按该文件的原生命令完成相同流程，不执行下方 Windows 命令，也不使用 System Events 批量修改其他 Space。
 
 ## 依赖与职责
 
 - 读取并使用 `imagegen/SKILL.md`：调用内置 `image_gen` 补充细节、扩展画幅、适配构图。安装技能文件不会开通图片生成服务；工具不可用时说明具体缺失，不擅自切换收费 API。
-- 读取并使用 `real-esrgan-skill/SKILL.md`：使用其 `scripts/upscale.ps1` 和 `realesrgan-x4plus` 照片模型，进行实际 4 倍 AI 放大。本包的 Windows 入口不依赖 Python、Git Bash 或 ffmpeg。
-- 本技能的 `scripts/wallpaper.ps1` 负责原生屏幕探测、按比例裁边与缩小、逐屏应用、读回及备份恢复。它不替代前两项 AI 处理。
+- 读取并使用 `real-esrgan-skill/SKILL.md`：Windows 使用 `scripts/upscale.ps1`，macOS 使用 `scripts/upscale-macos.sh`，均使用 `realesrgan-x4plus` 照片模型进行实际 4 倍 AI 放大。两平台图片入口都不依赖 Python、ffmpeg 或 CUDA。
+- Windows 使用本技能的 `scripts/wallpaper.ps1`，Mac 使用 `scripts/wallpaper-macos.sh` 及随包的原生 universal helper，完成探测、按比例裁边与缩小、逐屏应用、读回及备份恢复。它们不替代前两项 AI 处理。
 
 依赖通常位于本技能的同级目录；imagegen 也可能位于用户技能目录下的 `.system/imagegen`。先使用现有依赖，缺少时按包内安装说明安装。
 
@@ -67,4 +69,4 @@ description: 将用户图片补绘并用 Real-ESRGAN 增强为高清 Windows 桌
 
 7. 汇报实际完成情况：每屏原生尺寸、已应用图片尺寸、是否读回一致；给出最终文件链接。区分“新增像素”“AI 重建细节”与真实原始细节，不保证恢复未被拍下的信息。保存使用的提示词和处理记录；清理自己的中间文件前确认它们不是当前桌面正在引用的文件。不要将用户图片、屏幕身份或本机路径自动发布到代码仓库。
 
-使用 PowerShell 和 Windows API 完成本流程，不需要 computer-use。
+使用系统原生 API 完成本流程，不需要 computer-use。Mac 仅操作当前登录桌面会话中的屏幕；其他 Space、锁屏、动态/视频壁纸不属于本技能的批量修改或完整备份范围。
