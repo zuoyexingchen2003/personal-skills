@@ -33,7 +33,8 @@ engine_dir="$test_dir/install with spaces/skills/real-esrgan-skill/runtime/macos
 mkdir -p "$engine_dir"
 ditto -xk "$test_dir/engine.zip" "$engine_dir"
 chmod u+x "$engine_dir/realesrgan-ncnn-vulkan"
-"$engine_dir/realesrgan-ncnn-vulkan" -h > "$test_dir/artifact/engine-help.txt" 2>&1
+"$engine_dir/realesrgan-ncnn-vulkan" -h > "$test_dir/artifact/engine-help.txt" 2>&1 || help_status=$?
+grep -q 'Usage:' "$test_dir/artifact/engine-help.txt"
 gpu_status='UNAVAILABLE'
 if bash "$test_dir/install with spaces/skills/real-esrgan-skill/scripts/upscale-macos.sh" "$test_dir/self-test/gpu-input.png" "$test_dir/gpu-output.png" > "$test_dir/artifact/gpu.log" 2>&1; then gpu_status='INFERENCE_4X_PASS'; fi
 /usr/bin/shasum -a 256 "$source_file" | awk '{print $1}' > "$test_dir/artifact/source.sha256"

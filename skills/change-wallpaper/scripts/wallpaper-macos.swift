@@ -82,6 +82,19 @@ func screens() throws -> [(NSScreen, Monitor)] {
     }
 }
 func inspect() throws -> State { let monitors = try screens().map { $0.1 }; try require(!monitors.isEmpty, "No active macOS GUI displays. Run in the logged-in desktop session."); return State(Monitors: monitors) }
+func waitForImages(_ expected: [String: String]) throws -> State {
+    let deadline = Date().addingTimeInterval(5)
+    var last = try inspect()
+    while true {
+        if last.Monitors.count == expected.count && last.Monitors.allSatisfy({ monitor in
+            guard let actual = monitor.Image, let wanted = expected[monitor.Id] else { return false }
+            return absolute(actual).resolvingSymlinksInPath().path == absolute(wanted).resolvingSymlinksInPath().path
+        }) { return last }
+        if Date() >= deadline { throw ToolError(description: "Wallpaper path read-back failed. Expected: \(expected); observed: \(last.Monitors.map { [$0.Id, $0.Image ?? "nil"] })") }
+        RunLoop.current.run(until: Date().addingTimeInterval(0.1))
+        last = try inspect()
+    }
+}
 func loadImage(_ file: URL) throws -> CGImage {
     guard let source = CGImageSourceCreateWithURL(file as CFURL, nil), let image = CGImageSourceCreateImageAtIndex(source, 0, nil) else { throw ToolError(description: "Cannot decode image: \(file.path)") }
     return image
@@ -145,12 +158,7 @@ func apply(_ manifest: Manifest, manifestFile: URL) throws -> [String: String] {
             guard let entry = manifest.Entries.first(where: { $0.MonitorId == monitor.Id }) else { throw ToolError(description: "Display changed during apply.") }
             try workspace.setDesktopImageURL(absolute(entry.File), for: screen, options: options)
         }
-        let after = try inspect()
-        try require(after.Monitors.count == current.Monitors.count, "Display count changed during apply.")
-        for monitor in after.Monitors {
-            let expected = manifest.Entries.first { $0.MonitorId == monitor.Id }?.File
-            try require(monitor.Image == expected, "Wallpaper path read-back failed.")
-        }
+        _ = try waitForImages(Dictionary(uniqueKeysWithValues: manifest.Entries.map { ($0.MonitorId, $0.File) }))
     } catch {
         let original = error
         do { try restore(Backup(State: current)) } catch { throw ToolError(description: "Apply failed: \(original). Restoring also failed: \(error). Backup: \(backupFile.path)") }
@@ -167,8 +175,7 @@ func restore(_ backup: Backup) throws {
         let old = backup.State.Monitors.first { $0.Id == monitor.Id }!
         try workspace.setDesktopImageURL(absolute(old.Image!), for: screen, options: old.Options.native)
     }
-    let after = try inspect()
-    for monitor in after.Monitors { try require(monitor.Image == backup.State.Monitors.first { $0.Id == monitor.Id }?.Image, "Restored wallpaper path read-back failed.") }
+    _ = try waitForImages(Dictionary(uniqueKeysWithValues: backup.State.Monitors.map { ($0.Id, $0.Image!) }))
 }
 func fixture(width: Int, height: Int, file: URL) throws {
     let context = CGContext(data: nil, width: width, height: height, bitsPerComponent: 8, bytesPerRow: 0, space: CGColorSpaceCreateDeviceRGB(), bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)!
