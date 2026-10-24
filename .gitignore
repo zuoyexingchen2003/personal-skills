@@ -1,0 +1,10 @@
+.cache/
+**/runtime/
+dist/
+*.zip
+*.log
+__pycache__/
+wallpaper-backup-*.json
+wallpaper-manifest.json
+.env
+.env.*
